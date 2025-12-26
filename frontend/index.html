@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwasthyaSaathi | Doctor tak seedha raasta</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="language-toggle">
+        <button id="language-toggle-btn">
+            <i class="fas fa-globe"></i>
+            <span>English</span>
+        </button>
+    </div>
+    
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>SwasthyaSaathi</h1>
+                        <p>Doctor tak seedha raasta | Predict. Connect. Care</p>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <strong>Developed by: Team Hawks</strong>
+                    <div class="team-members">
+                        <div class="member">Mayank Bhatt (ML)</div>
+                        <div class="member">Ansh Karki (Backend)</div>
+                        <div class="member">Bhumika Bhatt (Frontend)</div>
+                        <div class="member">Parth Batham (AI)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="hero">
+            <h2 data-en="AI-Powered Rural Symptom Checker with Telemedicine Routing" data-hi="टेलीमेडिसिन रूटिंग के साथ एआई-संचालित ग्रामीण लक्षण जांचकर्ता">AI-Powered Rural Symptom Checker with Telemedicine Routing</h2>
+            <div class="tagline" data-en="A 'virtual first-aid station' for rural India" data-hi="ग्रामीण भारत के लिए एक 'वर्चुअल फर्स्ट-एड स्टेशन'">A 'virtual first-aid station' for rural India</div>
+            <p data-en="Helping rural patients understand symptoms, predict possible conditions, and connect to the nearest available doctors - all without needing to travel first." data-hi="ग्रामीण रोगियों को लक्षणों को समझने, संभावित स्थितियों की भविष्यवाणी करने और निकटतम उपलब्ध डॉक्टरों से जुड़ने में मदद करना - बिना पहले यात्रा किए।">Helping rural patients understand symptoms, predict possible conditions, and connect to the nearest available doctors - all without needing to travel first.</p>
+            
+            <div class="problem-solution">
+                <div class="problem-box">
+                    <h3><i class="fas fa-exclamation-triangle"></i> <span data-en="The Problem" data-hi="समस्या">The Problem</span></h3>
+                    <ul>
+                        <li data-en="Limited Access: 1 doctor per 10,000+ people in many villages" data-hi="सीमित पहुँच: कई गाँवों में 10,000+ लोगों पर 1 डॉक्टर">Limited Access: 1 doctor per 10,000+ people in many villages</li>
+                        <li data-en="Delayed Diagnosis: People travel long distances for minor issues" data-hi="विलंबित निदान: लोग मामूली समस्याओं के लिए लंबी दूरी तय करते हैं">Delayed Diagnosis: People travel long distances for minor issues</li>
+                        <li data-en="Misinformation: WhatsApp forwards replace medical advice" data-hi="गलत सूचना: व्हाट्सएप फॉरवर्ड मेडिकल सलाह की जगह ले लेते हैं">Misinformation: WhatsApp forwards replace medical advice</li>
+                        <li data-en="Emergency Confusion: Don't know where to go in critical situations" data-hi="आपातकालीन भ्रम: महत्वपूर्ण स्थितियों में कहाँ जाना है पता नहीं">Emergency Confusion: Don't know where to go in critical situations</li>
+                    </ul>
+                </div>
+                <div class="solution-box">
+                    <h3><i class="fas fa-lightbulb"></i> <span data-en="Our Solution" data-hi="हमारा समाधान">Our Solution</span></h3>
+                    <ul>
+                        <li data-en="AI Symptom Checker - Understands what might be wrong" data-hi="एआई लक्षण जांचकर्ता - समझता है कि क्या गलत हो सकता है">AI Symptom Checker - Understands what might be wrong</li>
+                        <li data-en="Doctor Connector - Finds nearby help" data-hi="डॉक्टर कनेक्टर - निकटतम सहायता ढूंढता है">Doctor Connector - Finds nearby help</li>
+                        <li data-en="Health Guide - Provides verified information" data-hi="स्वास्थ्य गाइड - सत्यापित जानकारी प्रदान करता है">Health Guide - Provides verified information</li>
+                        <li data-en="Emergency Assistant - Guides in critical situations" data-hi="आपातकालीन सहायक - महत्वपूर्ण स्थितियों में मार्गदर्शन करता है">Emergency Assistant - Guides in critical situations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="symptom-checker">
+                <div class="section-title">
+                    <i class="fas fa-notes-medical"></i>
+                    <h3 data-en="Step 1: Describe Your Symptoms" data-hi="चरण 1: अपने लक्षणों का वर्णन करें">Step 1: Describe Your Symptoms</h3>
+                </div>
+                
+                <div class="input-group">
+                    <label for="age" data-en="Age" data-hi="आयु">Age</label>
+                    <input type="number" id="age" value="45" min="1" max="120">
+                </div>
+                
+                <div class="input-group">
+                    <label for="duration" data-en="Duration of Symptoms" data-hi="लक्षणों की अवधि">Duration of Symptoms</label>
+                    <select id="duration">
+                        <option value="1" data-en="Less than 1 day" data-hi="1 दिन से कम">Less than 1 day</option>
+                        <option value="2" selected data-en="2 days" data-hi="2 दिन">2 days</option>
+                        <option value="3-5" data-en="3-5 days" data-hi="3-5 दिन">3-5 days</option>
+                        <option value="6+" data-en="More than 5 days" data-hi="5 दिन से अधिक">More than 5 days</option>
+                    </select>
+                </div>
+                
+                <div class="symptom-selection">
+                    <label data-en="Select Symptoms:" data-hi="लक्षण चुनें:">Select Symptoms:</label>
+                    <div class="symptom-options">
+                        <div class="symptom-option selected" data-symptom="fever" data-en="Fever" data-hi="बुखार">Fever</div>
+                        <div class="symptom-option selected" data-symptom="headache" data-en="Headache" data-hi="सिरदर्द">Headache</div>
+                        <div class="symptom-option selected" data-symptom="body-pain" data-en="Body Pain" data-hi="शरीर में दर्द">Body Pain</div>
+                        <div class="symptom-option" data-symptom="cough" data-en="Cough" data-hi="खांसी">Cough</div>
+                        <div class="symptom-option" data-symptom="fatigue" data-en="Fatigue" data-hi="थकान">Fatigue</div>
+                        <div class="symptom-option" data-symptom="nausea" data-en="Nausea" data-hi="मतली">Nausea</div>
+                        <div class="symptom-option" data-symptom="breathing" data-en="Breathing Difficulty" data-hi="सांस लेने में कठिनाई">Breathing Difficulty</div>
+                        <div class="symptom-option" data-symptom="diarrhea" data-en="Diarrhea" data-hi="दस्त">Diarrhea</div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="free-text" data-en="Additional Details (Optional)" data-hi="अतिरिक्त विवरण (वैकल्पिक)">Additional Details (Optional)</label>
+                    <input type="text" id="free-text" placeholder="Describe your symptoms in your own words..." data-placeholder-en="Describe your symptoms in your own words..." data-placeholder-hi="अपने शब्दों में अपने लक्षणों का वर्णन करें...">
+                </div>
+                
+                <button class="btn" id="check-symptoms">
+                    <i class="fas fa-search"></i> <span data-en="Check Symptoms with AI" data-hi="एआई के साथ लक्षण जांचें">Check Symptoms with AI</span>
+                </button>
+                
+                <p style="margin-top: 20px; font-size: 14px; color: var(--gray); text-align: center;">
+                    <i class="fas fa-info-circle"></i> <span data-en="Our AI is trained on Indian disease patterns and understands regional symptom descriptions" data-hi="हमारा एआई भारतीय बीमारी पैटर्न पर प्रशिक्षित है और क्षेत्रीय लक्षण विवरण समझता है">Our AI is trained on Indian disease patterns and understands regional symptom descriptions</span>
+                </p>
+            </div>
+            
+            <div class="results-section">
+                <div class="ai-results">
+                    <div class="section-title">
+                        <i class="fas fa-brain"></i>
+                        <h3 data-en="Step 2: AI Analysis Results" data-hi="चरण 2: एआई विश्लेषण परिणाम">Step 2: AI Analysis Results</h3>
+                    </div>
+                    
+                    <div id="ai-results-container">
+                        <p style="color: var(--gray); text-align: center; padding: 30px;">
+                            <i class="fas fa-arrow-left"></i> <span data-en="Click 'Check Symptoms with AI' to see AI analysis" data-hi="एआई विश्लेषण देखने के लिए 'एआई के साथ लक्षण जांचें' पर क्लिक करें">Click "Check Symptoms with AI" to see AI analysis</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="doctor-results">
+                    <div class="section-title">
+                        <i class="fas fa-user-md"></i>
+                        <h3 data-en="Step 3: Available Doctors & Telemedicine" data-hi="चरण 3: उपलब्ध डॉक्टर और टेलीमेडिसिन">Step 3: Available Doctors & Telemedicine</h3>
+                    </div>
+                    
+                    <div id="doctor-results-container">
+                        <p style="color: var(--gray); text-align: center; padding: 30px;">
+                            <span data-en="AI results will show available doctors here" data-hi="एआई परिणाम यहां उपलब्ध डॉक्टर दिखाएगा">AI results will show available doctors here</span>
+                        </p>
+                    </div>
+                    
+                    <div class="map-container" id="map"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="emergency-section">
+            <div class="section-title">
+                <i class="fas fa-exclamation-circle"></i>
+                <h3 data-en="Emergency Protocol" data-hi="आपातकालीन प्रोटोकॉल">Emergency Protocol</h3>
+            </div>
+            
+            <div class="emergency-content">
+                <div class="emergency-info">
+                    <h4 data-en="Red Flag System: Critical Symptoms Detected" data-hi="रेड फ्लैग सिस्टम: गंभीर लक्षण पाए गए">Red Flag System: Critical Symptoms Detected</h4>
+                    <p data-en="If you experience any of these symptoms, seek immediate medical attention:" data-hi="यदि आप इनमें से कोई भी लक्षण अनुभव करते हैं, तो तुरंत चिकित्सकीय सहायता लें:">If you experience any of these symptoms, seek immediate medical attention:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li data-en="Severe chest pain or pressure" data-hi="गंभीर सीने में दर्द या दबाव">Severe chest pain or pressure</li>
+                        <li data-en="Difficulty breathing or shortness of breath" data-hi="सांस लेने में कठिनाई या सांस की तकलीफ">Difficulty breathing or shortness of breath</li>
+                        <li data-en="Sudden confusion or difficulty speaking" data-hi="अचानक भ्रम या बोलने में कठिनाई">Sudden confusion or difficulty speaking</li>
+                        <li data-en="Severe uncontrolled bleeding" data-hi="गंभीर अनियंत्रित रक्तस्राव">Severe uncontrolled bleeding</li>
+                        <li data-en="Loss of consciousness" data-hi="चेतना खोना">Loss of consciousness</li>
+                    </ul>
+                    
+                    <div style="margin-top: 20px;">
+                        <button class="btn btn-secondary" id="show-emergency-centers">
+                            <i class="fas fa-phone-alt"></i> <span data-en="Show Nearest Emergency Centres" data-hi="निकटतम आपातकालीन केंद्र दिखाएं">Show Nearest Emergency Centres</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="emergency-contacts">
+                    <h4 data-en="Emergency Contacts" data-hi="आपातकालीन संपर्क">Emergency Contacts</h4>
+                    
+                    <div class="contact-card">
+                        <h4><i class="fas fa-ambulance"></i> <span data-en="National Ambulance" data-hi="राष्ट्रीय एम्बुलेंस">National Ambulance</span></h4>
+                        <p data-en="Dial: <strong>108</strong> (Free Emergency Service)" data-hi="डायल करें: <strong>108</strong> (मुफ्त आपातकालीन सेवा)">Dial: <strong>108</strong> (Free Emergency Service)</p>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <h4><i class="fas fa-hospital"></i> <span data-en="Nearest Government Hospital" data-hi="निकटतम सरकारी अस्पताल">Nearest Government Hospital</span></h4>
+                        <p>Bhimtal Community Health Centre: <strong>05942-123456</strong></p>
+                        <p data-en="Distance: 8 km | Estimated Travel Time: 20 minutes" data-hi="दूरी: 8 किमी | अनुमानित यात्रा समय: 20 मिनट">Distance: 8 km | Estimated Travel Time: 20 minutes</p>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <h4><i class="fas fa-first-aid"></i> <span data-en="First Aid Guide" data-hi="प्राथमिक चिकित्सा गाइड">First Aid Guide</span></h4>
+                        <p data-en="Step-by-step instructions for common emergencies" data-hi="सामान्य आपात स्थितियों के लिए चरण-दर-चरण निर्देश">Step-by-step instructions for common emergencies</p>
+                        <button class="action-btn call" id="show-first-aid" style="margin-top: 10px;">
+                            <i class="fas fa-book-medical"></i> <span data-en="View First Aid Guide" data-hi="प्राथमिक चिकित्सा गाइड देखें">View First Aid Guide</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="first-aid-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-first-aid">&times;</span>
+            <h3 data-en="First Aid Guide" data-hi="प्राथमिक चिकित्सा गाइड">First Aid Guide</h3>
+            
+            <div class="first-aid-tips" id="first-aid-tips">
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>SwasthyaSaathi</h3>
+                    <p data-en="A health companion for every rural family, bridging the doctor-patient gap with technology." data-hi="हर ग्रामीण परिवार के लिए एक स्वास्थ्य साथी, प्रौद्योगिकी के साथ डॉक्टर-रोगी के अंतर को पाटना।">A health companion for every rural family, bridging the doctor-patient gap with technology.</p>
+                    <p style="margin-top: 15px;"><strong data-en="Core Stack:" data-hi="मुख्य स्टैक:">Core Stack:</strong> HTML/CSS/JS, Node.js, Python, PostgreSQL</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 data-en="Unique Features" data-hi="अनूठी विशेषताएं">Unique Features</h3>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> <span data-en="Rural-First Design (Works on 2G/3G)" data-hi="ग्रामीण-पहला डिजाइन (2जी/3जी पर काम करता है)">Rural-First Design (Works on 2G/3G)</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span data-en="AI That Understands India" data-hi="एआई जो भारत को समझता है">AI That Understands India</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span data-en="Government Integration Ready" data-hi="सरकारी एकीकरण के लिए तैयार">Government Integration Ready</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span data-en="Privacy & Trust Focused" data-hi="गोपनीयता और विश्वास पर केंद्रित">Privacy & Trust Focused</span></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 data-en="Real-World Impact" data-hi="वास्तविक दुनिया का प्रभाव">Real-World Impact</h3>
+                    <ul>
+                        <li><i class="fas fa-users"></i> <span data-en="For Patients: Save time & money" data-hi="रोगियों के लिए: समय और पैसा बचाएं">For Patients: Save time & money</span></li>
+                        <li><i class="fas fa-user-md"></i> <span data-en="For Doctors: Reach more patients" data-hi="डॉक्टरों के लिए: अधिक रोगियों तक पहुंचें">For Doctors: Reach more patients</span></li>
+                        <li><i class="fas fa-landmark"></i> <span data-en="For Government: Better health insights" data-hi="सरकार के लिए: बेहतर स्वास्थ्य अंतर्दृष्टि">For Government: Better health insights</span></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>SwasthyaSaathi - AI-Powered Rural Symptom Checker with Telemedicine Routing | Demo for Judging Purposes</p>
+                <p style="margin-top: 10px;"><span data-en="Dataset Sources: Kaggle Symptom2Disease & Disease Prediction Datasets" data-hi="डेटासेट स्रोत: कैगल Symptom2Disease और Disease Prediction Datasets">Dataset Sources: Kaggle Symptom2Disease & Disease Prediction Datasets</span></p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    
+    <script src="script.js"></script>
+</body>
+</html>

@@ -242,7 +242,7 @@ SeemantSaathi/
 │   ├── package.json                 # Dependencies
 │   └── database/                    # SQL scripts
 │
-├── preprocessing/                # 🟡 NLP LAYER (Parth's Work)
+├── preprocessing/                # 🟡 NLP LAYER
 │   ├── README.md            # Explains Normalization & Cleaning logic
 │   ├── normalize.py              # Main pipeline script
 │   ├── language_detect.py        # Identifies Hindi/Hinglish/English
