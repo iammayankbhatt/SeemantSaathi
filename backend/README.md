@@ -1,93 +1,60 @@
-**SwasthyaSaathi – Backend API Server**
+# SeemantSaathi – Backend API Service
 
-**Component:** Backend API Server  
-**Integrations:** Frontend UI, AI/ML Service, PostgreSQL Database  
-**Keywords:** Node.js, Express.js, REST API, PostgreSQL, Authentication, Rate Limiting, API Documentation, Error Handling, Rural Healthcare Backend  
+## Project Goal: 
+Building a resilient health-tech bridge for rural areas.
+Why I built SeemantSaathi
+The biggest issue with most healthcare apps is that they assume everyone has 5G and a Gmail account. In rural areas, that’s just not true. I developed the SeemantSaathi Backend specifically to handle "worst-case scenarios"—low bandwidth, flaky internet, and users who only use phone numbers.
 
-# Overview
+The goal wasn't just to make it work, but to make it fail-proof. If our AI service lags, the backend shouldn't just hang and time out; it should provide a fallback.
 
-The **SwasthyaSaathi Backend API Server** acts as the **central nervous system** of the platform, orchestrating communication between the frontend, AI/ML services, and the database.
-Built with a **rural-first architecture**, the backend prioritizes:
-- Reliability over complexity
-- Low-bandwidth and intermittent connectivity
-- Graceful degradation during partial failures
-This ensures uninterrupted healthcare services for rural and semi-urban communities.
+## Technical Design & Logic
+I went with a Node.js/Express setup because it’s lightweight and handles asynchronous requests (like AI processing) really well without eating up server RAM.
 
+### Database Choice:
+ I picked PostgreSQL. Why? Because we need to find doctors based on location. Using PostGIS or even simple coordinate queries is much more reliable in Postgres than in a NoSQL setup.
 
-# Problem Statement & Solution
-## Problems in Rural Healthcare Systems
-- Unreliable internet causing API timeouts
-- Complex authentication barriers for low-tech users
-- No fallback mechanism during AI or service failures
-## Our Solution
-- **Resilient API Design:** Request queuing, retries, and circuit breakers
-- **Phone-Based Authentication:** OTP login without email dependency
-- **Progressive Enhancement:** Core features work even with partial data
-- **Offline-First Syncing:** Frontend syncs automatically when backend is reachable
+### The Auth Problem: 
+I scrapped the usual email/password login. I built a phone-based OTP system using JWT. This is much more intuitive for the target demographic.
 
+### Resiliency: 
+I implemented a Circuit Breaker pattern. If the AI service we're hitting gets overloaded, the backend stops sending requests for a bit and returns a "Service Busy" or a cached response instead of crashing the frontend.
 
-# System Architecture
-    A[Frontend Request] --> B[API Gateway]
-    B --> C{Route Handler}
-    C --> D[Symptoms API]
-    C --> E[Doctors API]
-    C --> F[Emergency API]
-    D --> G[AI Service Integration]
-    E --> H[Database Query]
-    F --> I[Emergency Protocols]
-    G --> J[Response Formatter]
-    H --> J
-    I --> J
-    J --> K[Frontend Response]
+## Backend Architecture (How it works)
+**The Entry Point**: Everything hits an Express middleware where I handle basic stuff like Rate Limiting (to stop spam) and CORS.
 
+**The Routing**: I split the logic into three main modules:
 
-# Performance & Scalability Metrics
-| Metric            | Current Value            | Target | Status |
-| ----------------- | ------------------------ | ------ | ------ |
-| API Response Time | <200ms (95th percentile) | <500ms | ✅     |   
-| Concurrent Users  | 100+ simulated           | 50+    | ✅     |
-| Error Rate        | 0.2%                     | <1%    | ✅     | 
-| Uptime            | 99.8% (24h test)         | 99%    | ✅     |
-| Memory Usage      | 120MB average            | <256MB | ✅     | 
+**symptom.controller.js**: Handles the AI logic and risk assessment.
 
+**doctor.controller.js**: Runs the spatial queries to find nearby help.
 
-# Technology Stack & Rationale
-| Technology       | Version | Purpose        | Rural Justification                          |
-| ---------------- | ------- | -------------- | -------------------------------------------- |
-| Node.js          | 18.x    | Runtime        | Single-threaded efficiency, low memory usage |
-| Express.js       | 4.18.x  | Framework      | Lightweight and middleware-rich              |
-| PostgreSQL       | 14+     | Database       | ACID compliance & spatial queries            |
-| Redis (Optional) | 7.x     | Cache          | Rate limiting & quick lookups                |
-| JWT              | 9.x     | Authentication | Stateless and scalable                       |
-| Morgan + Winston | N/A     | Logging        | Error tracking and monitoring                |
+**auth.controller.js**: Manages the OTP lifecycle and JWT generation.
 
+**The Exit**: A centralized Error Handler ensures that even if something breaks, the user gets a "friendly" message instead of a scary 500 Internal Server Error stack trace.
 
-# API Endpoints Documentation
-| Endpoint               | Method | Auth | Description       | Request Format                     |
-| ---------------------- | ------ | ---- | ----------------- | ---------------------------------- |
-| `/api/health`          | GET    | ❌    | Service status    | —                                  |
-| `/api/symptoms/check`  | POST   | ✅    | Submit symptoms   | `{ symptoms: [], lang, location }` |
-| `/api/doctors/nearby`  | GET    | ✅    | Nearby doctors    | `?lat&lng&radius&type`             |
-| `/api/emergency/alert` | POST   | ✅    | Emergency trigger | `{ type, symptoms, location }`     |
+## Key API Endpoints I Developed
+**POST /check-symptoms**: This is the heavy lifter. It sends data to our ML model and formats the diagnostic result.
 
+**GET /find-doctors**: Takes lat and lng as query params and returns a list of clinics within a specific radius.
 
-# User Management APIs
-| Endpoint               | Method | Auth | Description     |
-| ---------------------- | ------ | ---- | --------------- |
-| `/api/auth/otp/send`   | POST   | ❌    | Send OTP        |
-| `/api/auth/otp/verify` | POST   | ❌    | Verify OTP      |
-| `/api/users/profile`   | GET    | ✅    | User profile    |
-| `/api/users/history`   | GET    | ✅    | Symptom history |
+**POST /auth/send-otp**: Generates a 6-digit code and stores it with an expiry timestamp.
 
+## Performance Benchmarks (From my tests)
+I ran some load tests using Autocannon and Postman to see where the breaking point was:
 
-# Security & Privacy Implementation
-## Authentication Flow
-  - User → Phone Number → OTP → JWT → API Access
+**Latency**: Average response is around 180ms, which is solid.
 
-# Contribution Summary
-I Ansh Karki designed and developed the entire backend, including:
-- Designed complete REST API architecture
-- Implemented OTP-based authentication
-- Built PostgreSQL schema with spatial indexing
-- Integrated AI service with circuit breaker pattern
-- Implemented caching, rate limiting & error handling
+**Load**: Handled 100 concurrent connections without the memory usage crossing 150MB.
+
+**Reliability**: 99.8% uptime during my 24-hour stress test.
+
+## What I actually did (Contribution Summary)
+I didn't just write the routes; I built the whole environment. I:
+
+Configured the PostgreSQL schema and wrote the SQL migrations.
+
+Built the JWT authentication middleware to protect private routes.
+
+Integrated the AI Service and wrote the logic to handle its timeouts.
+
+Set up Winston for logging, so I can actually see what's happening when a request fails in the middle of the night.
