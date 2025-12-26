@@ -240,6 +240,7 @@ SeemantSaathi/
 │   ├── README.md                    # Backend documentation
 │   ├── server.js                    # Express server
 │   ├── package.json                 # Dependencies
+│   ├── routes.js
 │   └── database/                    # SQL scripts
 │
 ├── preprocessing/                # 🟡 NLP LAYER
