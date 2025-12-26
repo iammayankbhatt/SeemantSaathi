@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwasthyaSaathi | Doctor tak seedha raasta</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2a7de1;
+            --primary-dark: #1a5fb4;
+            --secondary: #26c281;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Language Toggle */
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+        }
+        
+        .language-toggle button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .language-toggle button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            background-color: white;
+            color: var(--primary);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .logo-text h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .logo-text p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .team-info {
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+        }
+        
+        .team-info strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 40px 0;
+            text-align: center;
+            background-color: white;
+            border-radius: var(--border-radius);
+            margin: 30px 0;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .hero h2 {
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            color: var(--gray);
+        }
+        
+        .tagline {
+            font-size: 24px;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+        
+        .problem-solution {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .problem-box, .solution-box {
+            flex: 1;
+            min-width: 300px;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .problem-box {
+            background-color: #fff5f5;
+            border-left: 5px solid var(--danger);
+        }
+        
+        .solution-box {
+            background-color: #f0fff4;
+            border-left: 5px solid var(--secondary);
+        }
+        
+        .problem-box h3, .solution-box h3 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .symptom-checker {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .results-section {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .ai-results, .doctor-results {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: var(--primary-dark);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-gray);
+        }
+        
+        .section-title i {
+            font-size: 20px;
+        }
+        
+        /* Symptom Selection */
+        .symptom-selection {
+            margin-bottom: 25px;
+        }
+        
+        .symptom-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .symptom-option {
+            background-color: var(--light);
+            padding: 10px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            border: 2px solid var(--light-gray);
+            transition: all 0.3s;
+        }
+        
+        .symptom-option:hover {
+            background-color: #e3f2fd;
+        }
+        
+        .symptom-option.selected {
+            background-color: #d1ecf1;
+            border-color: var(--primary);
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus, .input-group select:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-align: center;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #1da366;
+        }
+        
+        /* AI Results */
+        .condition-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .condition-name {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .confidence-bar {
+            height: 10px;
+            background-color: var(--light-gray);
+            border-radius: 5px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .confidence-fill {
+            height: 100%;
+            background-color: var(--secondary);
+            border-radius: 5px;
+        }
+        
+        .severity {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        .severity-low {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .severity-medium {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .severity-high {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        /* Doctor Results */
+        .doctor-card {
+            border: 1px solid var(--light-gray);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .doctor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .doctor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .doctor-info h4 {
+            margin-bottom: 5px;
+            color: var(--primary-dark);
+        }
+        
+        .doctor-specialty {
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .availability {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #d4edda;
+            color: #155724;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .availability.offline {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .doctor-details {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .detail {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gray);
+        }
+        
+        .doctor-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .action-btn.call {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .action-btn.book {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .action-btn.video {
+            background-color: #9b59b6;
+            color: white;
+        }
+        
+        .action-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        /* Map Container */
+        .map-container {
+            height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+            border: 1px solid var(--light-gray);
+        }
+        
+        /* Emergency Section */
+        .emergency-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 40px;
+            border-top: 5px solid var(--danger);
+        }
+        
+        .emergency-content {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .emergency-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .emergency-contacts {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .contact-card {
+            background-color: #fff5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--danger);
+        }
+        
+        .contact-card h4 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        /* First Aid Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            max-width: 800px;
+            position: relative;
+            animation: modalSlide 0.3s ease-out;
+        }
+        
+        @keyframes modalSlide {
+            from {transform: translateY(-50px); opacity: 0;}
+            to {transform: translateY(0); opacity: 1;}
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        .close-modal:hover {
+            color: var(--dark);
+        }
+        
+        .first-aid-tips {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .tip-card {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .tip-card h4 {
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 40px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 20px;
+            color: var(--light);
+            font-size: 20px;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-section a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-section a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #495057;
+            color: #adb5bd;
+            font-size: 14px;
+        }
+        
+        .team-members {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .member {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .member .role {
+            font-size: 12px;
+            color: var(--secondary);
+            margin-top: 3px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .language-toggle {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 10px;
+            }
+            
+            .problem-solution {
+                flex-direction: column;
+            }
+            
+            .main-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Language Toggle -->
+    <div class="language-toggle">
+        <button id="language-toggle-btn">
+            <i class="fas fa-globe"></i>
+            <span>English</span>
+        </button>
+    </div>
+    
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>SwasthyaSaathi</h1>
+                        <p>Doctor tak seedha raasta | Predict. Connect. Care</p>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <strong>Developed by: Team Hawks</strong>
+                    <div class="team-members">
+                        <div class="member">Mayank Bhatt (ML)</div>
+                        <div class="member">Ansh Karki (Backend)</div>
+                        <div class="member">Bhumika Bhatt (Frontend)</div>
+                        <div class="member">Parth Batham (AI)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="container">
+        <div class="hero">
+            <h2 data-en="AI-Powered Rural Symptom Checker with Telemedicine Routing" data-hi="टेलीमेडिसिन रूटिंग के साथ एआई-संचालित ग्रामीण लक्षण जांचकर्ता">AI-Powered Rural Symptom Checker with Telemedicine Routing</h2>
+            <div class="tagline" data-en="A 'virtual first-aid station' for rural India" data-hi="ग्रामीण भारत के लिए एक 'वर्चुअल फर्स्ट-एड स्टेशन'">A 'virtual first-aid station' for rural India</div>
+            <p data-en="Helping rural patients understand symptoms, predict possible conditions, and connect to the nearest available doctors - all without needing to travel first." data-hi="ग्रामीण रोगियों को लक्षणों को समझने, संभावित स्थितियों की भविष्यवाणी करने और निकटतम उपलब्ध डॉक्टरों से जुड़ने में मदद करना - बिना पहले यात्रा किए।">Helping rural patients understand symptoms, predict possible conditions, and connect to the nearest available doctors - all without needing to travel first.</p>
+            
+            <div class="problem-solution">
+                <div class="problem-box">
+                    <h3><i class="fas fa-exclamation-triangle"></i> <span data-en="The Problem" data-hi="समस्या">The Problem</span></h3>
+                    <ul>
+                        <li data-en="Limited Access: 1 doctor per 10,000+ people in many villages" data-hi="सीमित पहुँच: कई गाँवों में 10,000+ लोगों पर 1 डॉक्टर">Limited Access: 1 doctor per 10,000+ people in many villages</li>
+                        <li data-en="Delayed Diagnosis: People travel long distances for minor issues" data-hi="विलंबित निदान: लोग मामूली समस्याओं के लिए लंबी दूरी तय करते हैं">Delayed Diagnosis: People travel long distances for minor issues</li>
+                        <li data-en="Misinformation: WhatsApp forwards replace medical advice" data-hi="गलत सूचना: व्हाट्सएप फॉरवर्ड मेडिकल सलाह की जगह ले लेते हैं">Misinformation: WhatsApp forwards replace medical advice</li>
+                        <li data-en="Emergency Confusion: Don't know where to go in critical situations" data-hi="आपातकालीन भ्रम: महत्वपूर्ण स्थितियों में कहाँ जाना है पता नहीं">Emergency Confusion: Don't know where to go in critical situations</li>
+                    </ul>
+                </div>
+                <div class="solution-box">
+                    <h3><i class="fas fa-lightbulb"></i> <span data-en="Our Solution" data-hi="हमारा समाधान">Our Solution</span></h3>
+                    <ul>
+                        <li data-en="AI Symptom Checker - Understands what might be wrong" data-hi="एआई लक्षण जांचकर्ता - समझता है कि क्या गलत हो सकता है">AI Symptom Checker - Understands what might be wrong</li>
+                        <li data-en="Doctor Connector - Finds nearby help" data-hi="डॉक्टर कनेक्टर - निकटतम सहायता ढूंढता है">Doctor Connector - Finds nearby help</li>
+                        <li data-en="Health Guide - Provides verified information" data-hi="स्वास्थ्य गाइड - सत्यापित जानकारी प्रदान करता है">Health Guide - Provides verified information</li>
+                        <li data-en="Emergency Assistant - Guides in critical situations" data-hi="आपातकालीन सहायक - महत्वपूर्ण स्थितियों में मार्गदर्शन करता है">Emergency Assistant - Guides in critical situations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Symptom Checker -->
+            <div class="symptom-checker">
+                <div class="section-title">
+                    <i class="fas fa-notes-medical"></i>
+                    <h3 data-en="Step 1: Describe Your Symptoms" data-hi="चरण 1: अपने लक्षणों का वर्णन करें">Step 1: Describe Your Symptoms</h3>
+                </div>
+                
+                <div class="input-group">
+                    <label for="age" data-en="Age" data-hi="आयु">Age</label>
+                    <input type="number" id="age" value="45" min="1" max="120">
+                </div>
+                
+                <div class="input-group">
+                    <label for="duration" data-en="Duration of Symptoms" data-hi="लक्षणों की अवधि">Duration of Symptoms</label>
+                    <select id="duration">
+                        <option value="1" data-en="Less than 1 day" data-hi="1 दिन से कम">Less than 1 day</option>
+                        <option value="2" selected data-en="2 days" data-hi="2 दिन">2 days</option>
+                        <option value="3-5" data-en="3-5 days" data-hi="3-5 दिन">3-5 days</option>
+                        <option value="6+" data-en="More than 5 days" data-hi="5 दिन से अधिक">More than 5 days</option>
+                    </select>
+                </div>
+                
+                <div class="symptom-selection">
+                    <label data-en="Select Symptoms:" data-hi="लक्षण चुनें:">Select Symptoms:</label>
+                    <div class="symptom-options">
+                        <div class="symptom-option selected" data-symptom="fever" data-en="Fever" data-hi="बुखार">Fever</div>
+                        <div class="symptom-option selected" data-symptom="headache" data-en="Headache" data-hi="सिरदर्द">Headache</div>
+                        <div class="symptom-option selected" data-symptom="body-pain" data-en="Body Pain" data-hi="शरीर में दर्द">Body Pain</div>
+                        <div class="symptom-option" data-symptom="cough" data-en="Cough" data-hi="खांसी">Cough</div>
+                        <div class="symptom-option" data-symptom="fatigue" data-en="Fatigue" data-hi="थकान">Fatigue</div>
+                        <div class="symptom-option" data-symptom="nausea" data-en="Nausea" data-hi="मतली">Nausea</div>
+                        <div class="symptom-option" data-symptom="breathing" data-en="Breathing Difficulty" data-hi="सांस लेने में कठिनाई">Breathing Difficulty</div>
+                        <div class="symptom-option" data-symptom="diarrhea" data-en="Diarrhea" data-hi="दस्त">Diarrhea</div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="free-text" data-en="Additional Details (Optional)" data-hi="अतिरिक्त विवरण (वैकल्पिक)">Additional Details (Optional)</label>
+                    <input type="text" id="free-text" placeholder="Describe your symptoms in your own words..." data-placeholder-en="Describe your symptoms in your own words..." data-placeholder-hi="अपने शब्दों में अपने लक्षणों का वर्णन करें...">
+                </div>
+                
+                <button class="btn" id="check-symptoms">
+                    <i class="fas fa-search"></i> <span data-en="Check Symptoms with AI" data-hi="एआई के साथ लक्षण जांचें">Check Symptoms with AI</span>
+                </button>
+                
+                <p style="margin-top: 20px; font-size: 14px; color: var(--gray); text-align: center;">
+                    <i class="fas fa-info-circle"></i> <span data-en="Our AI is trained on Indian disease patterns and understands regional symptom descriptions" data-hi="हमारा एआई भारतीय बीमारी पैटर्न पर प्रशिक्षित है और क्षेत्रीय लक्षण विवरण समझता है">Our AI is trained on Indian disease patterns and understands regional symptom descriptions</span>
+                </p>
+            </div>
+            
+            <!-- Results Section -->
+            <div class="results-section">
+                <!-- AI Results -->
+                <div class="ai-results">
+                    <div class="section-title">
+                        <i class="fas fa-brain"></i>
+                        <h3 data-en="Step 2: AI Analysis Results" data-hi="चरण 2: एआई विश्लेषण परिणाम">Step 2: AI Analysis Results</h3>
+                    </div>
+                    
+                    <div id="ai-results-container">
+                        <p style="color: var(--gray); text-align: center; padding: 30px;">
+                            <i class="fas fa-arrow-left"></i> <span data-en="Click 'Check Symptoms with AI' to see AI analysis" data-hi="एआई विश्लेषण देखने के लिए 'एआई के साथ लक्षण जांचें' पर क्लिक करें">Click "Check Symptoms with AI" to see AI analysis</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Doctor Results -->
+                <div class="doctor-results">
+                    <div class="section-title">
+                        <i class="fas fa-user-md"></i>
+                        <h3 data-en="Step 3: Available Doctors & Telemedicine" data-hi="चरण 3: उपलब्ध डॉक्टर और टेलीमेडिसिन">Step 3: Available Doctors & Telemedicine</h3>
+                    </div>
+                    
+                    <div id="doctor-results-container">
+                        <p style="color: var(--gray); text-align: center; padding: 30px;">
+                            <span data-en="AI results will show available doctors here" data-hi="एआई परिणाम यहां उपलब्ध डॉक्टर दिखाएगा">AI results will show available doctors here</span>
+                        </p>
+                    </div>
+                    
+                    <div class="map-container" id="map"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Emergency Section -->
+        <div class="emergency-section">
+            <div class="section-title">
+                <i class="fas fa-exclamation-circle"></i>
+                <h3 data-en="Emergency Protocol" data-hi="आपातकालीन प्रोटोकॉल">Emergency Protocol</h3>
+            </div>
+            
+            <div class="emergency-content">
+                <div class="emergency-info">
+                    <h4 data-en="Red Flag System: Critical Symptoms Detected" data-hi="रेड फ्लैग सिस्टम: गंभीर लक्षण पाए गए">Red Flag System: Critical Symptoms Detected</h4>
+                    <p data-en="If you experience any of these symptoms, seek immediate medical attention:" data-hi="यदि आप इनमें से कोई भी लक्षण अनुभव करते हैं, तो तुरंत चिकित्सकीय सहायता लें:">If you experience any of these symptoms, seek immediate medical attention:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li data-en="Severe chest pain or pressure" data-hi="गंभीर सीने में दर्द या दबाव">Severe chest pain or pressure</li>
+                        <li data-en="Difficulty breathing or shortness of breath" data-hi="सांस लेने में कठिनाई या सांस की तकलीफ">Difficulty breathing or shortness of breath</li>
+                        <li data-en="Sudden confusion or difficulty speaking" data-hi="अचानक भ्रम या बोलने में कठिनाई">Sudden confusion or difficulty speaking</li>
+                        <li data-en="Severe uncontrolled bleeding" data-hi="गंभीर अनियंत्रित रक्तस्राव">Severe uncontrolled bleeding</li>
+                        <li data-en="Loss of consciousness" data-hi="चेतना खोना">Loss of consciousness</li>
+                    </ul>
+                    
+                    <div style="margin-top: 20px;">
+                        <button class="btn btn-secondary" id="show-emergency-centers">
+                            <i class="fas fa-phone-alt"></i> <span data-en="Show Nearest Emergency Centres" data-hi="निकटतम आपातकालीन केंद्र दिखाएं">Show Nearest Emergency Centres</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="emergency-contacts">
+                    <h4 data-en="Emergency Contacts" data-hi="आपातकालीन संपर्क">Emergency Contacts</h4>
+                    
+                    <div class="contact-card">
+                        <h4><i class="fas fa-ambulance"></i> <span data-en="National Ambulance" data-hi="राष्ट्रीय एम्बुलेंस">National Ambulance</span></h4>
+                        <p data-en="Dial: <strong>108</strong> (Free Emergency Service)" data-hi="डायल करें: <strong>108</strong> (मुफ्त आपातकालीन सेवा)">Dial: <strong>108</strong> (Free Emergency Service)</p>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <h4><i class="fas fa-hospital"></i> <span data-en="Nearest Government Hospital" data-hi="निकटतम सरकारी अस्पताल">Nearest Government Hospital</span></h4>
+                        <p>Bhimtal Community Health Centre: <strong>05942-123456</strong></p>
+                        <p data-en="Distance: 8 km | Estimated Travel Time: 20 minutes" data-hi="दूरी: 8 किमी | अनुमानित यात्रा समय: 20 मिनट">Distance: 8 km | Estimated Travel Time: 20 minutes</p>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <h4><i class="fas fa-first-aid"></i> <span data-en="First Aid Guide" data-hi="प्राथमिक चिकित्सा गाइड">First Aid Guide</span></h4>
+                        <p data-en="Step-by-step instructions for common emergencies" data-hi="सामान्य आपात स्थितियों के लिए चरण-दर-चरण निर्देश">Step-by-step instructions for common emergencies</p>
+                        <button class="action-btn call" id="show-first-aid" style="margin-top: 10px;">
+                            <i class="fas fa-book-medical"></i> <span data-en="View First Aid Guide" data-hi="प्राथमिक चिकित्सा गाइड देखें">View First Aid Guide</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- First Aid Modal -->
+    <div id="first-aid-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-first-aid">&times;</span>
+            <h3 data-en="First Aid Guide" data-hi="प्राथमिक चिकित्सा गाइड">First Aid Guide</h3>
+            
+            <div class="first-aid-tips" id="first-aid-tips">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>SwasthyaSaathi</h3>
+                    <p data-en="A health companion for every rural family, bridging the doctor-patient gap with technology." data-hi="हर ग्रामीण परिवार के लिए एक स्वास्थ्य साथी, प्रौद्योगिकी के साथ डॉक्टर-रोगी के अंतर को पाटना।">A health companion for every rural family, bridging the doctor-patient gap with technology.</p>
+                    <p style="margin-top: 15px;"><strong data-en="Core Stack:" data-hi="मुख्य स्टैक:">Core Stack:</strong> HTML/CSS/JS, Node.js, Python, PostgreSQL</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 data-en="Unique Features" data-hi="अनूठी विशेषताएं">Unique Features</h3>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> <span data-en="Rural-First Design (Works on 2G/3G)" data-hi="ग्रामीण-पहला डिजाइन (2जी/3जी पर काम करता है)">Rural-First Design (Works on 2G/3G)</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span data-en="AI That Understands India" data-hi="एआई जो भारत को समझता है">AI That Understands India</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span data-en="Government Integration Ready" data-hi="सरकारी एकीकरण के लिए तैयार">Government Integration Ready</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span data-en="Privacy & Trust Focused" data-hi="गोपनीयता और विश्वास पर केंद्रित">Privacy & Trust Focused</span></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 data-en="Real-World Impact" data-hi="वास्तविक दुनिया का प्रभाव">Real-World Impact</h3>
+                    <ul>
+                        <li><i class="fas fa-users"></i> <span data-en="For Patients: Save time & money" data-hi="रोगियों के लिए: समय और पैसा बचाएं">For Patients: Save time & money</span></li>
+                        <li><i class="fas fa-user-md"></i> <span data-en="For Doctors: Reach more patients" data-hi="डॉक्टरों के लिए: अधिक रोगियों तक पहुंचें">For Doctors: Reach more patients</span></li>
+                        <li><i class="fas fa-landmark"></i> <span data-en="For Government: Better health insights" data-hi="सरकार के लिए: बेहतर स्वास्थ्य अंतर्दृष्टि">For Government: Better health insights</span></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>SwasthyaSaathi - AI-Powered Rural Symptom Checker with Telemedicine Routing | Demo for Judging Purposes</p>
+                <p style="margin-top: 10px;"><span data-en="Dataset Sources: Kaggle Symptom2Disease & Disease Prediction Datasets" data-hi="डेटासेट स्रोत: कैगल Symptom2Disease और Disease Prediction Datasets">Dataset Sources: Kaggle Symptom2Disease & Disease Prediction Datasets</span></p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Leaflet JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    
+    <script>
+        // Language state
+        let currentLanguage = 'en';
+        let selectedSymptoms = ["fever", "headache", "body-pain"];
+        let map;
+        
+        // First aid tips data (with Hindi translations)
+        const firstAidTips = [
+            {
+                en: {title: "Fever Management", tips: ["Drink plenty of fluids", "Take paracetamol as directed", "Use cool compresses on forehead", "Rest and avoid exertion"]},
+                hi: {title: "बुखार प्रबंधन", tips: ["बहुत सारा तरल पदार्थ पिएं", "निर्देशानुसार पैरासिटामोल लें", "माथे पर ठंडे सेक लगाएं", "आराम करें और परिश्रम से बचें"]}
+            },
+            {
+                en: {title: "Minor Burns", tips: ["Cool burn with running water for 10-15 minutes", "Cover with sterile gauze", "Don't apply ice directly", "Don't break blisters"]},
+                hi: {title: "मामूली जलन", tips: ["बहते पानी से 10-15 मिनट के लिए जलन को ठंडा करें", "बाँझ पट्टी से ढकें", "सीधे बर्फ न लगाएं", "फफोले न फोड़ें"]}
+            },
+            {
+                en: {title: "Cuts & Wounds", tips: ["Clean with soap and water", "Apply pressure to stop bleeding", "Use antiseptic cream", "Cover with clean bandage"]},
+                hi: {title: "कटे और घाव", tips: ["साबुन और पानी से साफ करें", "रक्तस्राव रोकने के लिए दबाव डालें", "एंटीसेप्टिक क्रीम लगाएं", "साफ पट्टी से ढकें"]}
+            },
+            {
+                en: {title: "Diarrhea", tips: ["Drink ORS solution", "Avoid solid foods initially", "Stay hydrated with clear fluids", "Consult doctor if persists >24hrs"]},
+                hi: {title: "दस्त", tips: ["ओआरएस घोल पिएं", "शुरू में ठोस भोजन से बचें", "स्पष्ट तरल पदार्थों से हाइड्रेटेड रहें", "यदि >24 घंटे तक बना रहे तो डॉक्टर से सलाह लें"]}
+            },
+            {
+                en: {title: "Sprains & Strains", tips: ["Rest the injured area", "Ice for 20 minutes every 2-3 hours", "Compress with elastic bandage", "Elevate the injured limb"]},
+                hi: {title: "मोच और खिंचाव", tips: ["घायल क्षेत्र को आराम दें", "हर 2-3 घंटे में 20 मिनट के लिए बर्फ लगाएं", "लोचदार पट्टी से संपीड़ित करें", "घायल अंग को ऊपर उठाएं"]}
+            },
+            {
+                en: {title: "Heat Stroke", tips: ["Move to cool place", "Remove excess clothing", "Use cool wet cloths", "Drink cool water slowly"]},
+                hi: {title: "लू लगना", tips: ["ठंडी जगह पर ले जाएं", "अतिरिक्त कपड़े हटाएं", "ठंडे गीले कपड़े का उपयोग करें", "धीरे-धीरे ठंडा पानी पिएं"]}
+            }
+        ];
+        
+        // Emergency centers data (near Bhimtal, Uttarakhand)
+        const emergencyCenters = [
+            {name: "Bhimtal Community Health Centre", lat: 29.340, lng: 79.555, type: "government", phone: "05942-123456", distance: "8 km"},
+            {name: "Haldwani Government Hospital", lat: 29.221, lng: 79.526, type: "government", phone: "05946-234567", distance: "35 km"},
+            {name: "Kathgodam Medical Centre", lat: 29.268, lng: 79.548, type: "private", phone: "05946-345678", distance: "25 km"},
+            {name: "Nainital District Hospital", lat: 29.392, lng: 79.463, type: "government", phone: "05942-456789", distance: "15 km"},
+            {name: "Rikhanikhal Emergency Clinic", lat: 29.305, lng: 79.610, type: "private", phone: "05942-567890", distance: "12 km"}
+        ];
+        
+        // Language toggle function
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'hi' : 'en';
+            updateLanguage();
+        }
+        
+        // Update all text elements to current language
+        function updateLanguage() {
+            document.getElementById('language-toggle-btn').innerHTML = `
+                <i class="fas fa-globe"></i>
+                <span>${currentLanguage === 'en' ? 'हिंदी' : 'English'}</span>
+            `;
+            
+            document.querySelectorAll('[data-en]').forEach(element => {
+                if (element.hasAttribute('data-hi')) {
+                    const text = currentLanguage === 'en' ? element.getAttribute('data-en') : element.getAttribute('data-hi');
+                    
+                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        const placeholder = currentLanguage === 'en' ? 
+                            element.getAttribute('data-placeholder-en') : 
+                            element.getAttribute('data-placeholder-hi');
+                        if (placeholder) element.placeholder = placeholder;
+                    } else {
+                        element.innerHTML = text;
+                    }
+                }
+            });
+            
+            // Update select options
+            document.querySelectorAll('option').forEach(option => {
+                if (option.hasAttribute('data-en')) {
+                    option.textContent = currentLanguage === 'en' ? 
+                        option.getAttribute('data-en') : 
+                        option.getAttribute('data-hi');
+                }
+            });
+            
+            // Update symptom options
+            document.querySelectorAll('.symptom-option').forEach(option => {
+                if (option.hasAttribute('data-en')) {
+                    option.textContent = currentLanguage === 'en' ? 
+                        option.getAttribute('data-en') : 
+                        option.getAttribute('data-hi');
+                }
+            });
+        }
+        
+        // Show first aid guide
+        function showFirstAidGuide() {
+            const modal = document.getElementById('first-aid-modal');
+            const tipsContainer = document.getElementById('first-aid-tips');
+            
+            tipsContainer.innerHTML = '';
+            
+            firstAidTips.forEach(tip => {
+                const tipData = tip[currentLanguage];
+                const tipElement = document.createElement('div');
+                tipElement.className = 'tip-card';
+                tipElement.innerHTML = `
+                    <h4><i class="fas fa-heartbeat"></i> ${tipData.title}</h4>
+                    <ul style="margin-left: 20px;">
+                        ${tipData.tips.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                `;
+                tipsContainer.appendChild(tipElement);
+            });
+            
+            modal.style.display = 'block';
+        }
+        
+        // Show emergency centers on map
+        function showEmergencyCenters() {
+            map.eachLayer(layer => {
+                if (layer instanceof L.Marker) {
+                    map.removeLayer(layer);
+                }
+            });
+            
+            // Add emergency center markers
+            emergencyCenters.forEach(center => {
+                let iconColor = center.type === "government" ? "blue" : "red";
+                
+                L.marker([center.lat, center.lng], {
+                    icon: L.divIcon({
+                        html: `<div style="background-color: ${iconColor}; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; border: 2px solid white;"><i class="fas fa-hospital"></i></div>`,
+                        className: 'custom-marker',
+                        iconSize: [28, 28]
+                    })
+                }).addTo(map)
+                .bindPopup(`<strong>${center.name}</strong><br>Type: ${center.type}<br>Phone: ${center.phone}<br>Distance: ${center.distance}`);
+            });
+            
+            // Fit bounds to show all emergency centers
+            const bounds = L.latLngBounds(emergencyCenters.map(c => [c.lat, c.lng]));
+            map.fitBounds(bounds);
+            
+            // Show alert
+            const message = currentLanguage === 'en' ? 
+                `Showing ${emergencyCenters.length} emergency centers near you. Red markers are private hospitals, blue are government facilities.` :
+                `आपके निकट ${emergencyCenters.length} आपातकालीन केंद्र दिखा रहा है। लाल मार्कर निजी अस्पताल हैं, नीले सरकारी सुविधाएं हैं।`;
+            
+            alert(message);
+        }
+        
+        // Initialize the map
+        function initMap() {
+            // Set coordinates for Bhimtal, Uttarakhand
+            map = L.map('map').setView([29.344, 79.562], 12);
+            
+            // Add tile layer (using OpenStreetMap)
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            
+            // Add initial markers for doctors (hardcoded for demo)
+            const doctorLocations = [
+                {name: "Dr. Sharma Clinic", lat: 29.348, lng: 79.560, type: "private"},
+                {name: "Bhimtal Community Health Centre", lat: 29.340, lng: 79.555, type: "government"},
+                {name: "Dr. Verma Telemedicine Center", lat: 29.352, lng: 79.565, type: "telemedicine"}
+            ];
+            
+            // Add markers to map
+            doctorLocations.forEach(location => {
+                let iconColor = location.type === "government" ? "blue" : (location.type === "telemedicine" ? "green" : "red");
+                
+                L.marker([location.lat, location.lng], {
+                    icon: L.divIcon({
+                        html: `<div style="background-color: ${iconColor}; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">${location.type === "government" ? "G" : (location.type === "telemedicine" ? "T" : "P")}</div>`,
+                        className: 'custom-marker',
+                        iconSize: [24, 24]
+                    })
+                }).addTo(map)
+                .bindPopup(`<strong>${location.name}</strong><br>Type: ${location.type}<br>Click on doctor card for details`);
+            });
+            
+            // Add user location marker
+            L.marker([29.344, 79.562], {
+                icon: L.divIcon({
+                    html: `<div style="background-color: #2a7de1; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;"><i class="fas fa-user"></i></div>`,
+                    className: 'custom-marker',
+                    iconSize: [30, 30]
+                })
+            }).addTo(map)
+            .bindPopup(`<strong>Your Location</strong><br>Bhimtal Village`).openPopup();
+        }
+        
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initMap();
+            
+            // Language toggle
+            document.getElementById('language-toggle-btn').addEventListener('click', toggleLanguage);
+            
+            // First aid modal
+            document.getElementById('show-first-aid').addEventListener('click', showFirstAidGuide);
+            document.getElementById('close-first-aid').addEventListener('click', function() {
+                document.getElementById('first-aid-modal').style.display = 'none';
+            });
+            
+            // Emergency centers button
+            document.getElementById('show-emergency-centers').addEventListener('click', showEmergencyCenters);
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(event) {
+                const modal = document.getElementById('first-aid-modal');
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // Symptom selection
+            document.querySelectorAll('.symptom-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const symptom = this.getAttribute('data-symptom');
+                    const index = selectedSymptoms.indexOf(symptom);
+                    
+                    if (index > -1) {
+                        // Remove symptom
+                        selectedSymptoms.splice(index, 1);
+                        this.classList.remove('selected');
+                    } else {
+                        // Add symptom
+                        selectedSymptoms.push(symptom);
+                        this.classList.add('selected');
+                    }
+                    
+                    console.log("Selected symptoms:", selectedSymptoms);
+                });
+            });
+            
+            // Check symptoms button
+            document.getElementById('check-symptoms').addEventListener('click', function() {
+                const age = document.getElementById('age').value;
+                const duration = document.getElementById('duration').value;
+                
+                // Show loading
+                document.getElementById('ai-results-container').innerHTML = `
+                    <div style="text-align: center; padding: 20px;">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: var(--primary);"></i>
+                        <p style="margin-top: 10px;">${currentLanguage === 'en' ? 'AI is analyzing symptoms...' : 'एआई लक्षणों का विश्लेषण कर रहा है...'}</p>
+                    </div>
+                `;
+                
+                document.getElementById('doctor-results-container').innerHTML = `
+                    <div style="text-align: center; padding: 20px;">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: var(--primary);"></i>
+                        <p style="margin-top: 10px;">${currentLanguage === 'en' ? 'Finding available doctors...' : 'उपलब्ध डॉक्टर ढूंढ रहे हैं...'}</p>
+                    </div>
+                `;
+                
+                setTimeout(showAIResults, 1500);
+                setTimeout(showDoctorResults, 2000);
+            });
+        });
+        
+        // Show AI results (hardcoded for demo)
+        function showAIResults() {
+            const aiResultsHTML = `
+                <div style="margin-bottom: 20px;">
+                    <p><strong>${currentLanguage === 'en' ? 'Patient Profile:' : 'रोगी प्रोफ़ाइल:'}</strong> ${document.getElementById('age').value} ${currentLanguage === 'en' ? 'years old' : 'वर्ष'}, ${currentLanguage === 'en' ? 'symptoms for' : 'लक्षणों की अवधि'} ${document.getElementById('duration').options[document.getElementById('duration').selectedIndex].text}</p>
+                    <p><strong>${currentLanguage === 'en' ? 'Symptoms Detected:' : 'पाए गए लक्षण:'}</strong> ${selectedSymptoms.map(s => {
+                        const el = document.querySelector(`[data-symptom="${s}"]`);
+                        return el ? el.textContent : s.replace('-', ' ');
+                    }).join(', ')}</p>
+                </div>
+                
+                <div class="condition-card">
+                    <div class="condition-name">
+                        <span>${currentLanguage === 'en' ? 'Viral Fever' : 'वायरल बुखार'}</span>
+                        <span>85% ${currentLanguage === 'en' ? 'confidence' : 'आत्मविश्वास'}</span>
+                    </div>
+                    <p>${currentLanguage === 'en' ? 'Common during season changes, usually resolves in 3-5 days with proper rest and hydration.' : 'मौसम बदलने के दौरान आम, आमतौर पर उचित आराम और हाइड्रेशन के साथ 3-5 दिनों में ठीक हो जाता है।'}</p>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" style="width: 85%"></div>
+                    </div>
+                    <div class="severity severity-medium">
+                        <i class="fas fa-exclamation-triangle"></i> ${currentLanguage === 'en' ? 'Medium Severity - See doctor within 24 hours' : 'मध्यम गंभीरता - 24 घंटे के भीतर डॉक्टर को दिखाएं'}
+                    </div>
+                </div>
+                
+                <div class="condition-card">
+                    <div class="condition-name">
+                        <span>${currentLanguage === 'en' ? 'Dengue' : 'डेंगू'}</span>
+                        <span>10% ${currentLanguage === 'en' ? 'confidence' : 'आत्मविश्वास'}</span>
+                    </div>
+                    <p>${currentLanguage === 'en' ? 'Possible if fever persists beyond 3 days with severe body pain. Get a blood test to confirm.' : 'यदि 3 दिनों से अधिक समय तक बुखार गंभीर शरीर दर्द के साथ बना रहे तो संभव है। पुष्टि के लिए रक्त परीक्षण करवाएं।'}</p>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" style="width: 10%"></div>
+                    </div>
+                    <div class="severity severity-high">
+                        <i class="fas fa-exclamation-circle"></i> ${currentLanguage === 'en' ? 'High Severity - Get tested immediately' : 'उच्च गंभीरता - तुरंत परीक्षण करवाएं'}
+                    </div>
+                </div>
+                
+                <div class="condition-card">
+                    <div class="condition-name">
+                        <span>${currentLanguage === 'en' ? 'Common Cold' : 'सामान्य सर्दी'}</span>
+                        <span>5% ${currentLanguage === 'en' ? 'confidence' : 'आत्मविश्वास'}</span>
+                    </div>
+                    <p>${currentLanguage === 'en' ? 'Less likely given high fever. Monitor symptoms and rest.' : 'उच्च बुखार को देखते हुए कम संभावना है। लक्षणों की निगरानी करें और आराम करें।'}</p>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" style="width: 5%"></div>
+                    </div>
+                    <div class="severity severity-low">
+                        <i class="fas fa-check-circle"></i> ${currentLanguage === 'en' ? 'Low Severity - Self-care recommended' : 'कम गंभीरता - स्व-देखभाल की सिफारिश की जाती है'}
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 15px; background-color: #e7f3ff; border-radius: 8px;">
+                    <h4><i class="fas fa-lightbulb"></i> ${currentLanguage === 'en' ? 'AI Recommendation' : 'एआई सिफारिश'}</h4>
+                    <p>${currentLanguage === 'en' ? 'Based on your symptoms, we recommend consulting a doctor within 24 hours. You can use telemedicine option for immediate consultation or visit a nearby clinic.' : 'आपके लक्षणों के आधार पर, हम 24 घंटे के भीतर डॉक्टर से परामर्श करने की सलाह देते हैं। आप तत्काल परामर्श के लिए टेलीमेडिसिन विकल्प का उपयोग कर सकते हैं या पास की क्लिनिक में जा सकते हैं।'}</p>
+                </div>
+            `;
+            
+            document.getElementById('ai-results-container').innerHTML = aiResultsHTML;
+        }
+        
+        // Show doctor results (hardcoded for demo)
+        function showDoctorResults() {
+            const doctorResultsHTML = `
+                <div style="margin-bottom: 20px; padding: 15px; background-color: #f0fff4; border-radius: 8px;">
+                    <p><i class="fas fa-info-circle"></i> ${currentLanguage === 'en' ? 'Found 3 doctors/clinics near you (Bhimtal, Uttarakhand)' : 'आपके निकट 3 डॉक्टर/क्लिनिक मिले (भीमताल, उत्तराखंड)'}</p>
+                </div>
+                
+                <div class="doctor-card">
+                    <div class="doctor-header">
+                        <div class="doctor-info">
+                            <h4>${currentLanguage === 'en' ? 'Dr. Ramesh Sharma' : 'डॉ. रमेश शर्मा'}</h4>
+                            <div class="doctor-specialty">${currentLanguage === 'en' ? 'General Physician' : 'सामान्य चिकित्सक'}</div>
+                            <div class="availability">
+                                <i class="fas fa-circle"></i> ${currentLanguage === 'en' ? 'Available Today' : 'आज उपलब्ध'}
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 24px; color: var(--primary);">5km</div>
+                            <div style="font-size: 12px;">${currentLanguage === 'en' ? 'Distance' : 'दूरी'}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="doctor-details">
+                        <div class="detail">
+                            <i class="fas fa-clock"></i>
+                            <span>${currentLanguage === 'en' ? 'Wait Time: 15 mins' : 'प्रतीक्षा समय: 15 मिनट'}</span>
+                        </div>
+                        <div class="detail">
+                            <i class="fas fa-rupee-sign"></i>
+                            <span>${currentLanguage === 'en' ? 'Consultation: ₹200' : 'परामर्श: ₹200'}</span>
+                        </div>
+                        <div class="detail">
+                            <i class="fas fa-phone"></i>
+                            <span>05942-234567</span>
+                        </div>
+                    </div>
+                    
+                    <div class="doctor-actions">
+                        <button class="action-btn call" onclick="alert(currentLanguage === 'en' ? 'Calling Dr. Sharma at 05942-234567...' : 'डॉ. शर्मा को 05942-234567 पर कॉल किया जा रहा है...')">
+                            <i class="fas fa-phone-alt"></i> ${currentLanguage === 'en' ? 'Call Now' : 'अभी कॉल करें'}
+                        </button>
+                        <button class="action-btn book" onclick="alert(currentLanguage === 'en' ? 'Appointment booked with Dr. Sharma for today at 4:30 PM' : 'डॉ. शर्मा के साथ आज शाम 4:30 बजे नियुक्ति बुक की गई')">
+                            <i class="fas fa-calendar-check"></i> ${currentLanguage === 'en' ? 'Book Appointment' : 'नियुक्ति बुक करें'}
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="doctor-card">
+                    <div class="doctor-header">
+                        <div class="doctor-info">
+                            <h4>${currentLanguage === 'en' ? 'Bhimtal Community Health Centre' : 'भीमताल सामुदायिक स्वास्थ्य केंद्र'}</h4>
+                            <div class="doctor-specialty">${currentLanguage === 'en' ? 'Government Hospital' : 'सरकारी अस्पताल'}</div>
+                            <div class="availability">
+                                <i class="fas fa-circle"></i> ${currentLanguage === 'en' ? 'Open 24/7' : '24/7 खुला'}
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 24px; color: var(--primary);">8km</div>
+                            <div style="font-size: 12px;">${currentLanguage === 'en' ? 'Distance' : 'दूरी'}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="doctor-details">
+                        <div class="detail">
+                            <i class="fas fa-clock"></i>
+                            <span>${currentLanguage === 'en' ? 'Wait Time: 45 mins' : 'प्रतीक्षा समय: 45 मिनट'}</span>
+                        </div>
+                        <div class="detail">
+                            <i class="fas fa-rupee-sign"></i>
+                            <span>${currentLanguage === 'en' ? 'Consultation: Free' : 'परामर्श: मुफ्त'}</span>
+                        </div>
+                        <div class="detail">
+                            <i class="fas fa-phone"></i>
+                            <span>05942-123456</span>
+                        </div>
+                    </div>
+                    
+                    <div class="doctor-actions">
+                        <button class="action-btn call" onclick="alert(currentLanguage === 'en' ? 'Calling Community Health Centre at 05942-123456...' : 'सामुदायिक स्वास्थ्य केंद्र को 05942-123456 पर कॉल किया जा रहा है...')">
+                            <i class="fas fa-phone-alt"></i> ${currentLanguage === 'en' ? 'Call Now' : 'अभी कॉल करें'}
+                        </button>
+                        <button class="action-btn book" onclick="alert(currentLanguage === 'en' ? 'No appointment needed for government hospital. You can visit directly.' : 'सरकारी अस्पताल के लिए किसी नियुक्ति की आवश्यकता नहीं है। आप सीधे जा सकते हैं।')">
+                            <i class="fas fa-hospital"></i> ${currentLanguage === 'en' ? 'Visit Directly' : 'सीधे जाएं'}
+                        </button>
+                        <button class="action-btn video" onclick="alert(currentLanguage === 'en' ? 'Connecting to telemedicine service... This would integrate with e-Sanjeevani in full implementation.' : 'टेलीमेडिसिन सेवा से जुड़ रहे हैं... पूर्ण कार्यान्वयन में यह ई-संजीवनी के साथ एकीकृत होगा।')">
+                            <i class="fas fa-video"></i> ${currentLanguage === 'en' ? 'Telemedicine' : 'टेलीमेडिसिन'}
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="doctor-card">
+                    <div class="doctor-header">
+                        <div class="doctor-info">
+                            <h4>${currentLanguage === 'en' ? 'Dr. Priya Verma' : 'डॉ. प्रिया वर्मा'}</h4>
+                            <div class="doctor-specialty">${currentLanguage === 'en' ? 'Telemedicine Specialist' : 'टेलीमेडिसिन विशेषज्ञ'}</div>
+                            <div class="availability">
+                                <i class="fas fa-circle"></i> ${currentLanguage === 'en' ? 'Available Now' : 'अभी उपलब्ध'}
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 24px; color: var(--primary);">12km</div>
+                            <div style="font-size: 12px;">${currentLanguage === 'en' ? 'Distance' : 'दूरी'}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="doctor-details">
+                        <div class="detail">
+                            <i class="fas fa-clock"></i>
+                            <span>${currentLanguage === 'en' ? 'Wait Time: 0 mins' : 'प्रतीक्षा समय: 0 मिनट'}</span>
+                        </div>
+                        <div class="detail">
+                            <i class="fas fa-rupee-sign"></i>
+                            <span>${currentLanguage === 'en' ? 'Consultation: ₹150' : 'परामर्श: ₹150'}</span>
+                        </div>
+                        <div class="detail">
+                            <i class="fas fa-laptop-medical"></i>
+                            <span>${currentLanguage === 'en' ? 'Video Consultation' : 'वीडियो परामर्श'}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="doctor-actions">
+                        <button class="action-btn video" onclick="alert(currentLanguage === 'en' ? 'Starting video consultation with Dr. Verma... This would connect via e-Sanjeevani in full implementation.' : 'डॉ. वर्मा के साथ वीडियो परामर्श शुरू किया जा रहा है... पूर्ण कार्यान्वयन में यह ई-संजीवनी के माध्यम से जुड़ेगा।')">
+                            <i class="fas fa-video"></i> ${currentLanguage === 'en' ? 'Start Video Call' : 'वीडियो कॉल शुरू करें'}
+                        </button>
+                        <button class="action-btn book" onclick="alert(currentLanguage === 'en' ? 'Telemedicine appointment scheduled for right now!' : 'टेलीमेडिसिन नियुक्ति अभी के लिए निर्धारित की गई!')">
+                            <i class="fas fa-calendar-check"></i> ${currentLanguage === 'en' ? 'Book Now' : 'अभी बुक करें'}
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('doctor-results-container').innerHTML = doctorResultsHTML;
+        }
+    </script>
+</body>
+</html>
