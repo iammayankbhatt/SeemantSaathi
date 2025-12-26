@@ -242,11 +242,20 @@ SeemantSaathi/
 │   ├── package.json                 # Dependencies
 │   └── database/                    # SQL scripts
 │
+├── preprocessing/                # 🟡 NLP LAYER (Parth's Work)
+│   ├── README.md            # Explains Normalization & Cleaning logic
+│   ├── normalize.py              # Main pipeline script
+│   ├── language_detect.py        # Identifies Hindi/Hinglish/English
+│   ├── transliterate.py       # Script for Hinglish → English conversion
+│   ├── clean_text.py           # Noise removal (stopwords/filler words)
+│   └── keyword_map.json      # Dictionary mapping (colloquial → medical)
+│ 
 ├── ai-model/                       # 🟢 PROOF OF WORK
 │   ├── README.md            # Model logic, dataset link, accuracy explanation,         
 │   ├── Model_Training.ipynb   # The Notebook showing graphs/training
-│   ├── requirements.txt             # Python dependencies
-│   └── data/                        # Dataset
+│   ├── inference.py
+│   └── requirements.txt             # Python dependencies
+│                         # Dataset
 
 
 
